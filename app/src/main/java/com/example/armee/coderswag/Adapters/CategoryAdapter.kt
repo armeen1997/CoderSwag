@@ -1,24 +1,63 @@
 package com.example.armee.coderswag.Adapters
 
+import android.content.Context
+import android.text.Layout
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import com.example.armee.coderswag.Modeel.Category
+import com.example.armee.coderswag.R
 
-class CategoryAdapter:BaseAdapter() {
+class CategoryAdapter(context: Context, categories: List<Category>) :BaseAdapter() {
+
+    val context = context
+    val categories = categories
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val categoryView: View
+        val holder : ViewHolder
 
+        if (convertView == null){
+            categoryView = LayoutInflater.from(context).inflate(R.layout.category_list_item, null)
+            holder = ViewHolder()
+            holder.categoryImage = categoryView.findViewById(R.id.categoryImage)
+            holder.categoryName = categoryView.findViewById(R.id.categoryName)
+
+            categoryView.tag = holder
+
+        } else{
+           holder = convertView.tag as ViewHolder
+            categoryView = convertView
+        }
+
+        val category = categories[position]
+
+        val resourceId = context.resources.getIdentifier(category.image, "drawable", context.packageName)
+        holder.categoryImage?.setImageResource(resourceId)
+        println(resourceId)
+
+        holder.categoryName?.text = category.title
+        return categoryView
     }
 
     override fun getItem(position: Int): Any {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return categories[position]
     }
 
     override fun getItemId(position: Int): Long {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return 0
     }
 
     override fun getCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return categories.count()
+    }
+
+    private class ViewHolder {
+        var categoryImage: ImageView? = null
+        var categoryName: TextView? = null
     }
 
 }
